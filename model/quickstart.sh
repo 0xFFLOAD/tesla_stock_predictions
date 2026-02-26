@@ -2,17 +2,17 @@
 # Quick start guide for Tesla forecast model
 
 echo "╔══════════════════════════════════════════════════════════╗"
-echo "║         TESLA FORECAST QUICK START                      ║"
+echo "║         ETH GAS FORECAST QUICK START                    ║"
 echo "╚══════════════════════════════════════════════════════════╝"
 echo ""
 echo "This guide walks you through training and using the"
-echo "Tesla stock forecast model."
+echo "ETH gas forecast model."
 echo ""
 
 cd "$(dirname "$0")"
 
-DATASET_PRIMARY="../data/TSLA.csv"
-DATASET_FALLBACK="data/TSLA.csv"
+DATASET_PRIMARY="../data/ETH_GAS.csv"
+DATASET_FALLBACK="data/ETH_GAS.csv"
 DATASET=""
 
 if [ -f "$DATASET_PRIMARY" ]; then
@@ -26,7 +26,7 @@ echo ""
 
 # Step 1: Verify data
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Step 1: Verify Tesla Dataset"
+echo "Step 1: Verify ETH Gas Dataset"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 if [ -n "$DATASET" ]; then
@@ -48,8 +48,8 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "Step 2: Build Neural Network"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-if [ -f "tsla_nn" ]; then
-    echo "✅ Executable already built: tsla_nn"
+if [ -f "eth_nn" ]; then
+    echo "✅ Executable already built: eth_nn"
 else
     echo "🔨 Building..."
     if make > /dev/null 2>&1; then
@@ -67,9 +67,9 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "Step 3: Train Model"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-if [ -f "tsla_model.bin" ]; then
+if [ -f "eth_model.bin" ]; then
     size=$(ls -lh "tsla_model.bin" | awk '{print $5}')
-    echo "✅ Trained model exists: tsla_model.bin ($size)"
+    echo "✅ Trained model exists: eth_model.bin ($size)"
     echo ""
     read -p "Retrain from scratch? (y/N) " -n 1 -r
     echo
@@ -77,7 +77,7 @@ if [ -f "tsla_model.bin" ]; then
         echo "Keeping existing model."
     else
         echo ""
-        echo "Training baseline on historical TSLA closes..."
+        echo "Training baseline on historical ETH series..."
         echo ""
         make train
     fi
