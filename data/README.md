@@ -1,36 +1,36 @@
-# Tesla Data Sources
+# ETH Gas Data Sources
 
-This directory contains Tesla stock data and lightweight preprocessing utilities.
+This directory contains ETH gas-price time series and lightweight preprocessing utilities.
 
 ## Dataset
 
-### `TSLA_Stock_Dataset_2012_2026.csv`
+### `ETH_GAS.csv`
 
-Required columns:
+Expected columns (adapt as necessary for your data source):
 
 - `Date` (`YYYY-MM-DD`)
-- `Open`
-- `High`
-- `Low`
-- `Close`
-- `Volume`
+- `Open` (optional)
+- `High` (optional)
+- `Low` (optional)
+- `Close` (price / gas metric)
+- `Volume` (optional)
 
-The model treats this file as a chronological daily OHLCV time series.
+The code treats this file as a chronological time series; missing fields are tolerated.
 
 ## Utilities
 
 - `preview_data.py` — quick profile of date range, return statistics, and volatility.
-- `build_tesla_feature_snapshot.py` — computes rolling indicators and exports JSON snapshot.
+- `build_eth_feature_snapshot.py` — computes rolling indicators and exports JSON snapshot.
 
 ## Usage
 
 ```bash
 python3 data/preview_data.py
-python3 data/build_tesla_feature_snapshot.py
+python3 data/build_eth_feature_snapshot.py
 ```
 
 ## Notes
 
 - Keep rows sorted by `Date` ascending.
-- Remove commas from `Volume` values if present.
-- Missing days (weekends/holidays) are fine.
+- Remove commas from numeric fields if present.
+- Missing rows (e.g., gaps) are fine.

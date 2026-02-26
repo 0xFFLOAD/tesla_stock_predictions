@@ -5,9 +5,9 @@
 #include <string.h>
 
 #define MAX_ROWS 4096
-#define DATA_PATH_PRIMARY "data/TSLA.csv"
-#define DATA_PATH_FALLBACK "../data/TSLA.csv"
-#define MODEL_FILE "tsla_model.bin"
+#define DATA_PATH_PRIMARY "data/ETH_GAS.csv"
+#define DATA_PATH_FALLBACK "../data/ETH_GAS.csv"
+#define MODEL_FILE "eth_model.bin"
 
 typedef struct {
     char date[16];
@@ -20,7 +20,7 @@ typedef struct {
     double last_close;
     char last_date[16];
     int samples;
-} TeslaModel;
+} EthModel;
 
 static double sigmoid(double x) {
     if (x > 40.0) return 1.0;
@@ -210,7 +210,7 @@ static int load_prices(const char *path, PriceRow *rows, int *count) {
     return n > 1 ? 0 : -1;
 }
 
-static int train_model(TeslaModel *model, PriceRow *rows, int count) {
+static int train_model(EthModel *model, PriceRow *rows, int count) {
     if (count < 3) return -1;
 
     double sum = 0.0;
@@ -238,28 +238,28 @@ static int train_model(TeslaModel *model, PriceRow *rows, int count) {
     return 0;
 }
 
-static int save_model(const TeslaModel *model, const char *path) {
+static int save_model(const EthModel *model, const char *path) {
     FILE *f = fopen(path, "wb");
     if (!f) return -1;
-    fwrite(model, sizeof(TeslaModel), 1, f);
+    fwrite(model, sizeof(EthModel), 1, f);
     fclose(f);
     return 0;
 }
 
-static int load_model(TeslaModel *model, const char *path) {
+static int load_model(EthModel *model, const char *path) {
     FILE *f = fopen(path, "rb");
     if (!f) return -1;
-    int ok = fread(model, sizeof(TeslaModel), 1, f) == 1 ? 0 : -1;
+    int ok = fread(model, sizeof(EthModel), 1, f) == 1 ? 0 : -1;
     fclose(f);
     return ok;
 }
 
-static void predict_and_print(const TeslaModel *model, const char *forecast_date) {
+static void predict_and_print(const EthModel *model, const char *forecast_date) {
     double predicted_close = model->last_close * (1.0 + model->mean_return);
     double signal = model->std_return > 1e-8 ? model->mean_return / model->std_return : 0.0;
     double bullish_prob = sigmoid(signal) * 100.0;
 
-    printf("\n=== Tesla Stock Forecast ===\n");
+    printf("\n=== ETH Gas Forecast ===\n");
     printf("Forecast date      : %s\n", forecast_date && forecast_date[0] ? forecast_date : "NEXT");
     printf("Last known date    : %s\n", model->last_date);
     printf("Last close         : %.2f\n", model->last_close);
@@ -291,11 +291,11 @@ int main(int argc, char **argv) {
     const char *dataset_path = resolve_dataset_path();
     const char *model_path = resolve_model_path(argv[0]);
     if (load_prices(dataset_path, rows, &count) != 0) {
-        fprintf(stderr, "Failed to load Tesla dataset\n");
+        fprintf(stderr, "Failed to load ETH_GAS dataset\n");
         return 1;
     }
 
-    TeslaModel model = {0};
+    EthModel model = {0};
 
     if (flag_load && load_model(&model, model_path) == 0) {
         printf("Loaded model from %s\n", model_path);

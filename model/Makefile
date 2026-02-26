@@ -1,13 +1,13 @@
-# Tesla Stock Forecast Model Makefile
+# ETH Gas Forecast Model Makefile
 
 CC = cc
 CFLAGS = -std=c99 -Wall -Wextra -pedantic -O3 -march=native
 LDFLAGS = -lm -lpthread
-TARGET = tsla_nn
-MODEL_BIN = tsla_model.bin
+TARGET = eth_nn
+MODEL_BIN = eth_model.bin
 
 # Source files
-SRC = tsla_nn.c
+SRC = eth_nn.c
 OBJ = $(SRC:.c=.o)
 
 .PHONY: all clean train predict eval test odds-table
@@ -22,12 +22,12 @@ $(TARGET): $(OBJ)
 
 # Train the model from scratch
 train: $(TARGET)
-	@echo "Training Tesla forecast model..."
+	@echo "Training ETH forecast model..."
 	./$(TARGET) --train
 
 # Load existing model and enter prediction mode
 predict: $(TARGET)
-	@echo "Generating Tesla next-period forecast..."
+	@echo "Generating ETH next-period forecast..."
 	./$(TARGET) --load --predict
 
 # Evaluate on chronological holdout split
@@ -93,18 +93,19 @@ benchmark: $(TARGET)
 
 # Show model info
 info:
-	@echo "=== Tesla Forecast Model ==="
-	@echo "Input: TSLA OHLCV monthly history"
+	@echo "=== ETH Forecast Model ==="
+	@echo "Input: ETH_GAS time series (Close / optional OHLCV)"
 	@echo "Output: next-period close forecast + direction confidence"
 	@echo ""
 	@ls -lh $(MODEL_BIN) 2>/dev/null || echo "No trained model found (run 'make train')"
 
+
 help:
-	@echo "Tesla Stock Forecast Model"
+	@echo "ETH Gas Forecast Model"
 	@echo ""
 	@echo "Usage:"
 	@echo "  make              Build the model"
-	@echo "  make train        Train baseline TSLA return model"
+	@echo "  make train        Train baseline ETH return model"
 	@echo "  make predict      Forecast next period from trained model"
 	@echo "  make eval         Evaluate directional hit rate"
 	@echo "  make odds-table   Generate forecast table at odds/odds.txt"

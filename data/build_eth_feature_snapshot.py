@@ -5,8 +5,8 @@ import json
 from pathlib import Path
 
 
-DATASET = Path(__file__).with_name("TSLA.csv")
-OUT = Path(__file__).with_name("tesla_feature_snapshot.json")
+DATASET = Path(__file__).with_name("ETH_GAS.csv")
+OUT = Path(__file__).with_name("eth_feature_snapshot.json")
 
 
 def to_float(value: str) -> float:
@@ -30,8 +30,8 @@ def main() -> None:
     if len(rows) < 3:
         raise RuntimeError("Need at least 3 rows to compute snapshot")
 
-    closes = [to_float(r["Close"]) for r in rows]
-    volumes = [to_float(r["Volume"]) for r in rows]
+    closes = [to_float(r.get("Close", 0)) for r in rows]
+    volumes = [to_float(r.get("Volume", 0)) for r in rows]
 
     daily_returns = []
     for i in range(1, len(closes)):
@@ -44,8 +44,8 @@ def main() -> None:
     previous = rows[-2]
 
     snapshot = {
-        "symbol": "TSLA",
-        "latest_date": latest["Date"],
+        "symbol": "ETH_GAS",
+        "latest_date": latest.get("Date"),
         "latest_close": closes[-1],
         "previous_close": closes[-2],
         "last_return_pct": ((closes[-1] - closes[-2]) / closes[-2]) * 100.0,
@@ -54,14 +54,14 @@ def main() -> None:
         "ma_12": moving_average(closes, 12),
         "avg_volume_6": moving_average(volumes, 6),
         "avg_return_pct": (sum(daily_returns) / len(daily_returns)) * 100.0,
-        "latest_open": to_float(latest["Open"]),
-        "latest_high": to_float(latest["High"]),
-        "latest_low": to_float(latest["Low"]),
-        "previous_date": previous["Date"],
+        "latest_open": to_float(latest.get("Open", 0)),
+        "latest_high": to_float(latest.get("High", 0)),
+        "latest_low": to_float(latest.get("Low", 0)),
+        "previous_date": previous.get("Date"),
     }
 
     OUT.write_text(json.dumps(snapshot, indent=2), encoding="utf-8")
-    print(f"Wrote Tesla feature snapshot to {OUT}")
+    print(f"Wrote ETH feature snapshot to {OUT}")
 
 
 if __name__ == "__main__":

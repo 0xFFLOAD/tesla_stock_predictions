@@ -4,7 +4,7 @@ import csv
 from pathlib import Path
 
 
-DATASET = Path(__file__).with_name("TSLA.csv")
+DATASET = Path(__file__).with_name("ETH_GAS.csv")
 
 
 def to_float(value: str) -> float:
@@ -18,7 +18,7 @@ def load_rows():
 
 def main() -> None:
     print("=" * 72)
-    print("TSLA DATA PREVIEW")
+    print("ETH GAS DATA PREVIEW")
     print("=" * 72)
 
     if not DATASET.exists():
