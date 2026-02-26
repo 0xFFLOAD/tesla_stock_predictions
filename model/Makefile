@@ -35,7 +35,7 @@ eval: $(TARGET)
 	@echo "Running historical evaluation..."
 	/usr/bin/python3 evaluate.py
 
-# Generate odds table file from matchup inputs
+# Generate odds table file from forecast inputs
 odds-table:
 	@echo "Generating forecast table..."
 	@set -e; \
